@@ -35,7 +35,7 @@ namespace api.agenda.de.compromissos.tests
 
             _consultaService.AgendarConsulta(consulta1);
 
-            Assert.Throws<DuasConsultasNoMesmoPeriodoException>(() => _consultaService.AgendarConsulta(consulta2));
+            Assert.Throws<ConsultasNoMesmoPeriodoException>(() => _consultaService.AgendarConsulta(consulta2));
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace api.agenda.de.compromissos.tests
 
             _consultaService.AgendarConsulta(consulta1);
 
-            Assert.Throws<DuasConsultasNoMesmoPeriodoException>(() => _consultaService.AgendarConsulta(consulta2));
+            Assert.Throws<ConsultasNoMesmoPeriodoException>(() => _consultaService.AgendarConsulta(consulta2));
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace api.agenda.de.compromissos.tests
 
             _consultaService.AgendarConsulta(consulta1);
 
-            Assert.Throws<DuasConsultasNoMesmoPeriodoException>(() => _consultaService.AgendarConsulta(consulta2));
+            Assert.Throws<ConsultasNoMesmoPeriodoException>(() => _consultaService.AgendarConsulta(consulta2));
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace api.agenda.de.compromissos.tests
 
             _consultaService.AgendarConsulta(consulta1);
 
-            Assert.Throws<DuasConsultasNoMesmoPeriodoException>(() => _consultaService.AgendarConsulta(consulta2));
+            Assert.Throws<ConsultasNoMesmoPeriodoException>(() => _consultaService.AgendarConsulta(consulta2));
         }
 
         [Fact]

@@ -2,7 +2,7 @@
 
 namespace api.agenda.de.compromissos.Exceptions
 {
-    public class DuasConsultasNoMesmoPeriodoException : Exception
+    public class ConsultasNoMesmoPeriodoException : Exception
     {
     }
 }

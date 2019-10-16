@@ -8,5 +8,15 @@ namespace api.agenda.de.compromissos.Repositories
         {
             throw new System.NotImplementedException();
         }
+
+        public bool ConsultaComDataFinalMenorQueDataInicial(ConsultaModel consulta)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool ConsultaNoMesmoPeriodo(ConsultaModel consulta)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
