@@ -10,7 +10,7 @@ namespace api.agenda.de.compromissos.Models.Abstracts
             Nascimento = nascimento;
         }
 
-        protected String Nome { get; set; }
-        protected DateTime Nascimento { get; set; }
+        public String Nome { get; private set; }
+        public DateTime Nascimento { get; private set; }
     }
 }

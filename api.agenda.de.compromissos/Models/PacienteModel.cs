@@ -8,5 +8,12 @@ namespace api.agenda.de.compromissos.Models
         public PacienteModel(string nome, DateTime nascimento) : base(nome, nascimento)
         {
         }
+
+        public PacienteModel(int id,string nome, DateTime nascimento) : base(nome, nascimento)
+        {
+            Id = id;
+        }
+
+        public int Id { get; set; }
     }
 }
