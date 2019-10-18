@@ -29,7 +29,7 @@ namespace api.agenda.de.compromissos.Repositories
             }
         }
 
-        public IList<PacienteModel> Buscar()
+        public IEnumerable<PacienteModel> Buscar()
         {
             var pacientes = new List<PacienteModel>();
 
@@ -43,7 +43,10 @@ namespace api.agenda.de.compromissos.Repositories
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        pacientes.Add(new PacienteModel((int)reader["id_paciente"], (string)reader["Nome"], (DateTime)reader["Nascimento"]));
+                        while (reader.Read())
+                        {
+                            pacientes.Add(new PacienteModel((int)reader["id_paciente"], (string)reader["Nome"], (DateTime)reader["Nascimento"]));
+                        }
                     }
                 }
 

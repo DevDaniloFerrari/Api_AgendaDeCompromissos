@@ -8,6 +8,6 @@ namespace api.agenda.de.compromissos.Interfaces.Services
         void Incluir(PacienteModel paciente);
         void Alterar(PacienteModel paciente);
         void Excluir(int id);
-        IList<PacienteModel> Buscar();
+        IEnumerable<PacienteModel> Buscar();
     }
 }

@@ -1,4 +1,5 @@
-﻿using api.agenda.de.compromissos.Interfaces.Services;
+﻿using api.agenda.de.compromissos.Interfaces.Repositories;
+using api.agenda.de.compromissos.Interfaces.Services;
 using api.agenda.de.compromissos.Models;
 using System.Collections.Generic;
 
@@ -7,31 +8,31 @@ namespace api.agenda.de.compromissos.Services
     public class PacienteService : IPacienteService
     {
 
-        IPacienteService _pacienteService;
+        IPacienteRepository _pacienteRepository;
 
-        public PacienteService(IPacienteService pacienteService)
+        public PacienteService(IPacienteRepository pacienteRepository)
         {
-            _pacienteService = pacienteService;
+            _pacienteRepository = pacienteRepository;
         }
 
         public void Alterar(PacienteModel paciente)
         {
-            _pacienteService.Alterar(paciente);
+            _pacienteRepository.Alterar(paciente);
         }
 
-        public IList<PacienteModel> Buscar()
+        public IEnumerable<PacienteModel> Buscar()
         {
-            return _pacienteService.Buscar();
+            return _pacienteRepository.Buscar();
         }
 
         public void Excluir(int id)
         {
-            _pacienteService.Excluir(id);
+            _pacienteRepository.Excluir(id);
         }
 
         public void Incluir(PacienteModel paciente)
         {
-            _pacienteService.Incluir(paciente);
+            _pacienteRepository.Incluir(paciente);
         }
     }
 }
