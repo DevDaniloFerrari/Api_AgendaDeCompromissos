@@ -14,22 +14,23 @@ namespace api.agenda.de.compromissos.tests.Mocks
         {
             consultas.Add(consulta);
         }
-        public bool ConsultaNoMesmoPeriodo(ConsultaModel consulta)
+
+        public void FinalizarConsulta(int id)
         {
-            if (consultas.Any(c => (c.Inicio < consulta.Inicio && c.Fim > consulta.Fim)
-                || (c.Inicio > consulta.Inicio && c.Fim < consulta.Fim)
-                || (c.Inicio > consulta.Inicio && c.Fim > consulta.Fim)
-                || (c.Inicio < consulta.Inicio && c.Fim < consulta.Fim)))
-                return true;
-            return false;
-        }
-        public bool ConsultaComDataFinalMenorQueDataInicial(ConsultaModel consulta)
-        {
-            if (consulta.Fim < consulta.Inicio)
-                return true;
-            return false;
+            throw new System.NotImplementedException();
         }
 
-        
+        public void CancelarConsulta(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IList<ConsultaModel> ConsultasNoPeriodo(ConsultaModel consulta)
+        {
+            return consultas.Where(w => (w.Inicio < consulta.Inicio && w.Fim > consulta.Fim)
+                || (w.Inicio > consulta.Inicio && w.Fim < consulta.Fim)
+                || (w.Inicio > consulta.Inicio && w.Fim > consulta.Fim)
+                || (w.Inicio < consulta.Inicio && w.Fim < consulta.Fim)).ToList();
+        }
     }
 }

@@ -1,12 +1,13 @@
 ﻿using api.agenda.de.compromissos.Models;
-using System;
+using System.Collections.Generic;
 
 namespace api.agenda.de.compromissos.Interfaces.Repositories
 {
     public interface IConsultaRepository
     {
         void AgendarConsulta(ConsultaModel consulta);
-        bool ConsultaNoMesmoPeriodo(ConsultaModel consulta);
-        bool ConsultaComDataFinalMenorQueDataInicial(ConsultaModel consulta);
+        void FinalizarConsulta(int id);
+        void CancelarConsulta(int id);
+        IList<ConsultaModel> ConsultasNoPeriodo(ConsultaModel consulta);
     }
 }
