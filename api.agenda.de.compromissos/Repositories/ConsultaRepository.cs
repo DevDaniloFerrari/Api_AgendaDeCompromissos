@@ -10,7 +10,7 @@ namespace api.agenda.de.compromissos.Repositories
     {
         public void AgendarConsulta(ConsultaModel consulta)
         {
-            using (var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Clinica;Integrated Security=True"))
+            using (var connection = new SqlConnection(Configuration.getConnectionString()))
             {
                 connection.Open();
 
@@ -31,7 +31,7 @@ namespace api.agenda.de.compromissos.Repositories
 
         public void FinalizarConsulta(int id)
         {
-            using (var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Clinica;Integrated Security=True"))
+            using (var connection = new SqlConnection(Configuration.getConnectionString()))
             {
                 connection.Open();
 
@@ -49,7 +49,7 @@ namespace api.agenda.de.compromissos.Repositories
 
         public void CancelarConsulta(int id)
         {
-            using (var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Clinica;Integrated Security=True"))
+            using (var connection = new SqlConnection(Configuration.getConnectionString()))
             {
                 connection.Open();
 
@@ -69,7 +69,7 @@ namespace api.agenda.de.compromissos.Repositories
         {
             var consultas = new List<ConsultaModel>();
 
-            using (var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Clinica;Integrated Security=True"))
+            using (var connection = new SqlConnection(Configuration.getConnectionString()))
             {
                 connection.Open();
 

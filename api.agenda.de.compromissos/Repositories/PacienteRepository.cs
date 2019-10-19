@@ -11,7 +11,7 @@ namespace api.agenda.de.compromissos.Repositories
     {
         public void Alterar(PacienteModel paciente)
         {
-            using (var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Clinica;Integrated Security=True"))
+            using (var connection = new SqlConnection(Configuration.getConnectionString()))
             {
                 connection.Open();
 
@@ -33,7 +33,7 @@ namespace api.agenda.de.compromissos.Repositories
         {
             var pacientes = new List<PacienteModel>();
 
-            using (var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Clinica;Integrated Security=True"))
+            using (var connection = new SqlConnection(Configuration.getConnectionString()))
             {
                 connection.Open();
 
@@ -58,7 +58,7 @@ namespace api.agenda.de.compromissos.Repositories
 
         public void Excluir(int id)
         {
-            using (var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Clinica;Integrated Security=True"))
+            using (var connection = new SqlConnection(Configuration.getConnectionString()))
             {
                 connection.Open();
 
@@ -76,7 +76,7 @@ namespace api.agenda.de.compromissos.Repositories
 
         public void Incluir(PacienteModel paciente)
         {
-            using (var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Clinica;Integrated Security=True"))
+            using (var connection = new SqlConnection(Configuration.getConnectionString()))
             {
                 connection.Open();
 
