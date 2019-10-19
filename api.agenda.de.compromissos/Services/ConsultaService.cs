@@ -2,7 +2,6 @@
 using api.agenda.de.compromissos.Interfaces.Repositories;
 using api.agenda.de.compromissos.Interfaces.Services;
 using api.agenda.de.compromissos.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
