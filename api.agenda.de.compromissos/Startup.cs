@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace api.agenda.de.compromissos
 {
@@ -26,6 +25,8 @@ namespace api.agenda.de.compromissos
             services.AddSingleton<IPacienteService, PacienteService>();
             services.AddSingleton<IPacienteRepository, PacienteRepository>();
 
+            services.AddSingleton<IConsultaService, ConsultaService>();
+            services.AddSingleton<IConsultaRepository, ConsultaRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

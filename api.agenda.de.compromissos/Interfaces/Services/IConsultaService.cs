@@ -1,4 +1,5 @@
 ﻿using api.agenda.de.compromissos.Models;
+using System.Collections.Generic;
 
 namespace api.agenda.de.compromissos.Interfaces.Services
 {
@@ -9,5 +10,6 @@ namespace api.agenda.de.compromissos.Interfaces.Services
         void CancelarConsulta(int id);
         bool ConsultaComDataFinalMenorQueDataInicial(ConsultaModel consulta);
         bool ConsultaNoMesmoPeriodo(ConsultaModel consulta);
+        IList<ConsultaModel> Consultas();
     }
 }

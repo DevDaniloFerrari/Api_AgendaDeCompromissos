@@ -8,6 +8,6 @@ namespace api.agenda.de.compromissos.Interfaces.Repositories
         void AgendarConsulta(ConsultaModel consulta);
         void FinalizarConsulta(int id);
         void CancelarConsulta(int id);
-        IList<ConsultaModel> ConsultasNoPeriodo(ConsultaModel consulta);
+        IList<ConsultaModel> Consultas();
     }
 }

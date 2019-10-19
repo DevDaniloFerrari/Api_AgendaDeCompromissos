@@ -1,7 +1,8 @@
-﻿using api.agenda.de.compromissos.Interfaces.Repositories;
+﻿using api.agenda.de.compromissos.Interfaces.Services;
 using api.agenda.de.compromissos.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 
 namespace api.agenda.de.compromissos.Controllers
 {
@@ -10,40 +11,63 @@ namespace api.agenda.de.compromissos.Controllers
     public class PacienteController : ControllerBase
     {
 
-        private readonly IPacienteRepository _pacienteRepository;
+        private readonly IPacienteService _pacienteService;
 
-        public PacienteController(IPacienteRepository pacienteRepository)
+        public PacienteController(IPacienteService pacienteService)
         {
-            _pacienteRepository = pacienteRepository;
+            _pacienteService = pacienteService;
         }
 
-        // GET api/values
         [HttpGet]
-        public string Get()
+        public string ObterPacientes()
         {
-            return JsonConvert.SerializeObject(_pacienteRepository.Buscar());
+            return JsonConvert.SerializeObject(_pacienteService.Buscar());
         }
 
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody] PacienteModel paciente)
+        public IActionResult IncuirPaciente([FromBody] PacienteModel paciente)
         {
-            _pacienteRepository.Incluir(paciente);
+            try
+            {
+                _pacienteService.Incluir(paciente);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] PacienteModel paciente)
+        public IActionResult AlterarPaciente(int id, [FromBody] PacienteModel paciente)
         {
             if (id == paciente.Id)
-                _pacienteRepository.Alterar(paciente);
+                try
+                {
+                    _pacienteService.Alterar(paciente);
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, ex.Message);
+                }
+            else
+                return StatusCode(406, "Id informado na URL não corresponde com o id passado no body");
+
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult DeletarPaciente(int id)
         {
-            _pacienteRepository.Excluir(id);
+            try
+            {
+                _pacienteService.Excluir(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

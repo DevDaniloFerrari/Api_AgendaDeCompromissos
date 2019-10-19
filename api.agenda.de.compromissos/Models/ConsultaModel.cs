@@ -2,8 +2,10 @@
 
 namespace api.agenda.de.compromissos.Models
 {
+    [Serializable]
     public class ConsultaModel
     {
+        public ConsultaModel() { }
         public ConsultaModel(PacienteModel paciente, DateTime inicio, DateTime fim, string observacoes)
         {
             Paciente = paciente;
@@ -26,10 +28,10 @@ namespace api.agenda.de.compromissos.Models
         }
 
         public int Id { get; set; }
-        public PacienteModel Paciente { get; private set; }
-        public DateTime Inicio { get; private set; }
-        public DateTime Fim { get; private set; }
-        public String Observacoes { get; private set; }
+        public PacienteModel Paciente { get; set; }
+        public DateTime Inicio { get; set; }
+        public DateTime Fim { get; set; }
+        public String Observacoes { get; set; }
         public bool Finalizada { get; set; }
         public bool Cancelada { get; set; }
     }

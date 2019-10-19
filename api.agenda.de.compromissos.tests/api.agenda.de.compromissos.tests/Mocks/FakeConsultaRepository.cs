@@ -25,12 +25,9 @@ namespace api.agenda.de.compromissos.tests.Mocks
             throw new System.NotImplementedException();
         }
 
-        public IList<ConsultaModel> ConsultasNoPeriodo(ConsultaModel consulta)
+        public IList<ConsultaModel> Consultas()
         {
-            return consultas.Where(w => (w.Inicio < consulta.Inicio && w.Fim > consulta.Fim)
-                || (w.Inicio > consulta.Inicio && w.Fim < consulta.Fim)
-                || (w.Inicio > consulta.Inicio && w.Fim > consulta.Fim)
-                || (w.Inicio < consulta.Inicio && w.Fim < consulta.Fim)).ToList();
+            return consultas;
         }
     }
 }

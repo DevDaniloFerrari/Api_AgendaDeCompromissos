@@ -65,7 +65,7 @@ namespace api.agenda.de.compromissos.Repositories
             }
         }
 
-        public IList<ConsultaModel> ConsultasNoPeriodo(ConsultaModel consulta)
+        public IList<ConsultaModel> Consultas()
         {
             var consultas = new List<ConsultaModel>();
 
@@ -74,38 +74,36 @@ namespace api.agenda.de.compromissos.Repositories
                 connection.Open();
 
                 string query = "SELECT [id_consulta]" +
-"      , Paciente.[id_paciente]" +
-"	  , Paciente.Nome" +
-"	  , Paciente.Nascimento" +
-"      ,[Inicio]" +
-"      ,[Fim]" +
-"      ,[Observacoes]" +
-"      ,[Finalizada]" +
-"      ,[Cancelada]" +
-"  FROM [dbo].[Consulta]" +
-"  INNER JOIN Paciente ON Paciente.id_paciente = Consulta.id_paciente" +
-"  WHERE" +
-$"	Inicio <= {consulta.Inicio.ToString("yyyy-MM-dd HH:mm:ss.fff")}" +
-"	AND" +
-$"	Fim >= {consulta.Fim.ToString("yyyy-MM-dd HH:mm:ss.fff")}" +
-"GO";
+                                "      ,Paciente.[id_paciente]" +
+                                "	   ,Paciente.Nome" +
+                                "	   ,Paciente.Nascimento" +
+                                "      ,[Inicio]" +
+                                "      ,[Fim]" +
+                                "      ,[Observacoes]" +
+                                "      ,[Finalizada]" +
+                                "      ,[Cancelada]" +
+                                "  FROM [dbo].[Consulta]" +
+                                "  INNER JOIN Paciente ON Paciente.id_paciente = Consulta.id_paciente;";
 
                 using (var command = new SqlCommand(query, connection))
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        consultas.Add(new ConsultaModel(
-                                                        (int)reader["id_consulta"],
-                                                        new PacienteModel( 
-                                                                            (int)reader["id_paciente"],
-                                                                            (string)reader["Nome"],
-                                                                            (DateTime)reader["Nascimento"]),
-                                                        (DateTime)reader["Inicio"],
-                                                        (DateTime)reader["Fim"],
-                                                        (string)reader["Observacoes"],
-                                                        (bool)reader["Finalizada"],
-                                                        (bool)reader["Cancelada"]
-                                                       ));
+                        while (reader.Read())
+                        {
+                            consultas.Add(new ConsultaModel(
+                                                            (int)reader["id_consulta"],
+                                                            new PacienteModel(
+                                                                                (int)reader["id_paciente"],
+                                                                                (string)reader["Nome"],
+                                                                                (DateTime)reader["Nascimento"]),
+                                                            (DateTime)reader["Inicio"],
+                                                            (DateTime)reader["Fim"],
+                                                            (string)reader["Observacoes"],
+                                                            (bool)(reader["Finalizada"] == DBNull.Value ? false : true),
+                                                            (bool)(reader["Cancelada"] == DBNull.Value ? false : true)
+                                                           ));
+                        }
                     }
                 }
 

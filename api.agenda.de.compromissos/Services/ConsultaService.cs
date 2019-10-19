@@ -2,6 +2,7 @@
 using api.agenda.de.compromissos.Interfaces.Repositories;
 using api.agenda.de.compromissos.Interfaces.Services;
 using api.agenda.de.compromissos.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace api.agenda.de.compromissos.Services
@@ -46,10 +47,12 @@ namespace api.agenda.de.compromissos.Services
 
         public bool ConsultaNoMesmoPeriodo(ConsultaModel consulta)
         {
-            var consultas = _consultaRepository.ConsultasNoPeriodo(consulta);
+            var consultas = _consultaRepository.Consultas();
 
             if (consultas.Count == 0)
                 return false;
+
+            LimparConsultasFinalizadasOuCanceladas(consultas);
 
             if (consultas.Any(c => (c.Inicio < consulta.Inicio && c.Fim > consulta.Fim)
                 || (c.Inicio > consulta.Inicio && c.Fim < consulta.Fim)
@@ -57,6 +60,16 @@ namespace api.agenda.de.compromissos.Services
                 || (c.Inicio < consulta.Inicio && c.Fim < consulta.Fim)))
                 return true;
             return false;
+        }
+
+        public IList<ConsultaModel> Consultas()
+        {
+            return _consultaRepository.Consultas();
+        }
+
+        private void LimparConsultasFinalizadasOuCanceladas(IList<ConsultaModel> consultas)
+        {
+            consultas.ToList().RemoveAll(r => r.Finalizada == true || r.Cancelada == true);
         }
     }
 }
