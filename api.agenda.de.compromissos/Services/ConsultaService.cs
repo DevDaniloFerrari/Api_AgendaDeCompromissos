@@ -2,6 +2,7 @@
 using api.agenda.de.compromissos.Interfaces.Repositories;
 using api.agenda.de.compromissos.Interfaces.Services;
 using api.agenda.de.compromissos.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -49,15 +50,16 @@ namespace api.agenda.de.compromissos.Services
         {
             var consultas = _consultaRepository.Consultas();
 
+            consultas = RemoverConsultasFinalizadasOuCanceladas(consultas);
+
             if (consultas.Count == 0)
                 return false;
 
-            LimparConsultasFinalizadasOuCanceladas(consultas);
 
-            if (consultas.Any(c => (c.Inicio < consulta.Inicio && c.Fim > consulta.Fim)
-                || (c.Inicio > consulta.Inicio && c.Fim < consulta.Fim)
-                || (c.Inicio > consulta.Inicio && c.Fim > consulta.Fim)
-                || (c.Inicio < consulta.Inicio && c.Fim < consulta.Fim)))
+            if (consultas.Any(c => (c.Inicio <= consulta.Inicio && c.Fim >= consulta.Fim)
+                || (c.Inicio >= consulta.Inicio && c.Fim <= consulta.Fim)
+                || (c.Inicio >= consulta.Inicio && consulta.Fim >= c.Inicio && c.Fim >= consulta.Fim)
+                || (c.Inicio <= consulta.Inicio && consulta.Inicio <= c.Fim && c.Fim <= consulta.Fim)))
                 return true;
             return false;
         }
@@ -67,9 +69,9 @@ namespace api.agenda.de.compromissos.Services
             return _consultaRepository.Consultas();
         }
 
-        private void LimparConsultasFinalizadasOuCanceladas(IList<ConsultaModel> consultas)
+        private IList<ConsultaModel> RemoverConsultasFinalizadasOuCanceladas(IList<ConsultaModel> consultas)
         {
-            consultas.ToList().RemoveAll(r => r.Finalizada == true || r.Cancelada == true);
+            return consultas.Where(w => w.Finalizada == false && w.Cancelada == false).ToList();
         }
     }
 }

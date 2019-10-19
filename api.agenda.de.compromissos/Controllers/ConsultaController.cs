@@ -35,7 +35,8 @@ namespace api.agenda.de.compromissos.Controllers
             }
             catch (Exception ex)
             {
-                if (ex.GetType() == typeof(ConsultasNoMesmoPeriodoException) || ex.GetType() == typeof(DataFinalMenorQueDataInicialException))
+                if (ex.GetType() == typeof(ConsultasNoMesmoPeriodoException) 
+                    || ex.GetType() == typeof(DataFinalMenorQueDataInicialException))
                     return StatusCode(406, ex.Message);
                 else
                     return StatusCode(500, ex.Message);

@@ -27,6 +27,28 @@ namespace api.agenda.de.compromissos.tests
         }
 
         [Fact]
+        public void TestAgendarConsultaSemErroAntesDeUmaConsultaExistente()
+        {
+            PacienteModel paciente = new PacienteModel("Danilo", new DateTime(2000, 6, 18));
+            ConsultaModel consulta1 = new ConsultaModel(paciente, new DateTime(2019, 10, 16, 12, 0, 0), new DateTime(2019, 10, 16, 16, 0, 0), "");
+            ConsultaModel consulta2 = new ConsultaModel(paciente, new DateTime(2019, 10, 16, 10, 0, 0), new DateTime(2019, 10, 16, 11, 0, 0), "");
+
+            _consultaService.AgendarConsulta(consulta1);
+            _consultaService.AgendarConsulta(consulta2);
+        }
+
+        [Fact]
+        public void TestAgendarConsultaSemErroDepoisDeUmaConsultaExistente()
+        {
+            PacienteModel paciente = new PacienteModel("Danilo", new DateTime(2000, 6, 18));
+            ConsultaModel consulta1 = new ConsultaModel(paciente, new DateTime(2019, 10, 16, 12, 0, 0), new DateTime(2019, 10, 16, 16, 0, 0), "");
+            ConsultaModel consulta2 = new ConsultaModel(paciente, new DateTime(2019, 10, 16, 17, 0, 0), new DateTime(2019, 10, 16, 18, 0, 0), "");
+
+            _consultaService.AgendarConsulta(consulta1);
+            _consultaService.AgendarConsulta(consulta2);
+        }
+
+        [Fact]
         public void TestAgendarConsultaDentroDeUmMesmoPeriodo()
         {
             PacienteModel paciente = new PacienteModel("Danilo", new DateTime(2000, 6, 18));
