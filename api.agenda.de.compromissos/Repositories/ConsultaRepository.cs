@@ -74,16 +74,15 @@ namespace api.agenda.de.compromissos.Repositories
                 connection.Open();
 
                 string query = "SELECT [id_consulta]" +
-                                "      ,Paciente.[id_paciente]" +
-                                "	   ,Paciente.Nome" +
-                                "	   ,Paciente.Nascimento" +
+                                "      ,[id_paciente]" +
+                                "	   ,[Nome]" +
+                                "	   ,[Nascimento]" +
                                 "      ,[Inicio]" +
                                 "      ,[Fim]" +
                                 "      ,[Observacoes]" +
                                 "      ,[Finalizada]" +
                                 "      ,[Cancelada]" +
-                                "  FROM [dbo].[Consulta]" +
-                                "  INNER JOIN Paciente ON Paciente.id_paciente = Consulta.id_paciente;";
+                                "  FROM [vw].[Consulta]";
 
                 using (var command = new SqlCommand(query, connection))
                 {

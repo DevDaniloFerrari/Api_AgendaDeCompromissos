@@ -1,4 +1,5 @@
-﻿using api.agenda.de.compromissos.Interfaces.Services;
+﻿using api.agenda.de.compromissos.Exceptions;
+using api.agenda.de.compromissos.Interfaces.Services;
 using api.agenda.de.compromissos.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -6,7 +7,7 @@ using System;
 
 namespace api.agenda.de.compromissos.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/pacientes")]
     [ApiController]
     public class PacienteController : ControllerBase
     {
@@ -18,55 +19,87 @@ namespace api.agenda.de.compromissos.Controllers
             _pacienteService = pacienteService;
         }
 
-        [HttpGet]
+        [HttpGet()]
         public string ObterPacientes()
-        {
-            return JsonConvert.SerializeObject(_pacienteService.Buscar());
-        }
-
-        [HttpPost]
-        public IActionResult IncuirPaciente([FromBody] PacienteModel paciente)
         {
             try
             {
-                _pacienteService.Incluir(paciente);
-                return Ok();
+                return JsonConvert.SerializeObject(_pacienteService.Buscar());
             }
-            catch (Exception ex)
+            catch (NenhumPacienteCadastradoException exception)
             {
-                return StatusCode(500, ex.Message);
+                return exception.Message;
+            }
+            catch (NaoFoiPossivelConectarNoBancoDeDadosException exception)
+            {
+                return exception.Message;
+            }
+        }
+
+        [HttpGet("{id}")]
+        public string ObterPaciente(int id)
+        {
+            try
+            {
+                return JsonConvert.SerializeObject(_pacienteService.Buscar(id));
+            }
+            catch (PacienteNaoExisteException exception)
+            {
+                return exception.Message;
+            }
+            catch (NaoFoiPossivelConectarNoBancoDeDadosException exception)
+            {
+                return exception.Message;
+            }
+        }
+
+        [HttpPost()]
+        public JsonResult IncuirPaciente([FromBody] PacienteModel paciente)
+        {
+            try
+            {
+                int id = _pacienteService.Incluir(paciente);
+
+                Response.Headers.Add("Location", $"api/pacientes/{id}");
+
+                return new JsonResult("Paciente incluido com sucesso") { StatusCode = 201 };
+            }
+            catch (Exception exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 500 };
             }
         }
 
         [HttpPut("{id}")]
-        public IActionResult AlterarPaciente(int id, [FromBody] PacienteModel paciente)
+        public JsonResult AlterarPaciente(int id, [FromBody] PacienteModel paciente)
         {
             if (id == paciente.Id)
                 try
                 {
-                    _pacienteService.Alterar(paciente);
-                    return Ok();
+                    PacienteModel pacienteAlterado = _pacienteService.Alterar(paciente);
+
+                    return new JsonResult(pacienteAlterado) { StatusCode = 201 };
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    return StatusCode(500, ex.Message);
+                    return new JsonResult(exception.Message) { StatusCode = 500 };
                 }
             else
-                return StatusCode(406, "Id informado na URL não corresponde com o id passado no body");
+                return new JsonResult("Id informado na URL não corresponde com o id passado no body") { StatusCode = 406 };
 
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeletarPaciente(int id)
+        public JsonResult DeletarPaciente(int id)
         {
             try
             {
                 _pacienteService.Excluir(id);
-                return Ok();
+                return new JsonResult("Excluido com sucesso") { StatusCode = 200 };
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return StatusCode(500, ex.Message);
+                return new JsonResult(exception.Message) { StatusCode = 500 };
             }
         }
     }

@@ -15,9 +15,9 @@ namespace api.agenda.de.compromissos.Services
             _pacienteRepository = pacienteRepository;
         }
 
-        public void Alterar(PacienteModel paciente)
+        public PacienteModel Alterar(PacienteModel paciente)
         {
-            _pacienteRepository.Alterar(paciente);
+            return _pacienteRepository.Alterar(paciente);
         }
 
         public IEnumerable<PacienteModel> Buscar()
@@ -25,14 +25,19 @@ namespace api.agenda.de.compromissos.Services
             return _pacienteRepository.Buscar();
         }
 
+        public PacienteModel Buscar(int id)
+        {
+            return _pacienteRepository.Buscar(id);
+        }
+
         public void Excluir(int id)
         {
             _pacienteRepository.Excluir(id);
         }
 
-        public void Incluir(PacienteModel paciente)
+        public int Incluir(PacienteModel paciente)
         {
-            _pacienteRepository.Incluir(paciente);
+            return _pacienteRepository.Incluir(paciente);
         }
     }
 }

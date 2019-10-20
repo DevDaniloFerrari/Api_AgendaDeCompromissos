@@ -5,9 +5,10 @@ namespace api.agenda.de.compromissos.Interfaces.Repositories
 {
     public interface IPacienteRepository
     {
-        void Incluir(PacienteModel paciente);
-        void Alterar(PacienteModel paciente);
+        int Incluir(PacienteModel paciente);
+        PacienteModel Alterar(PacienteModel paciente);
         void Excluir(int id);
         IEnumerable<PacienteModel> Buscar();
+        PacienteModel Buscar(int id);
     }
 }
