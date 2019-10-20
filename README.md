@@ -6,7 +6,7 @@ API feita em .NET Core 2.1 utilizando banco de dados SQL Server
 
 - **Cadastro de Paciente** <br>
   Requisição: [HttpPost] <br>
-  Utilizar a URI: /api/paciente <br>
+  Utilizar a URI: /api/pacientes <br>
   Body: {
          "Nome":"",
          "Nascimento":"yyyy-mm-dd"
@@ -14,7 +14,7 @@ API feita em .NET Core 2.1 utilizando banco de dados SQL Server
         
 - **Alteração de Paciente** <br>
   Requisição: [HttpPut] <br>
-  Utilizar a URI: /api/paciente/{id} <br>
+  Utilizar a URI: /api/pacientes/{id} <br>
   Body: {
          "Id":,
          "Nome":"",
@@ -23,15 +23,19 @@ API feita em .NET Core 2.1 utilizando banco de dados SQL Server
         
 - **Deleção de Paciente** <br>
   Requisição: [HttpDelete] <br>
-  Utilizar a URI: /api/paciente/{id} <br>
+  Utilizar a URI: /api/pacientes/{id} <br>
   
 - **Obter lista de Pacientes** <br>
   Requisição: [HttpGet] <br>
-  Utilizar a URI: /api/paciente
+  Utilizar a URI: /api/pacientes
+  
+- **Obter Paciente** <br>
+  Requisição: [HttpGet] <br>
+  Utilizar a URI: /api/pacientes/{id}  
   
 - **Agendar Consulta** <br>
   Requisição: [HttpPost] <br>
-  Utilizar a URI: /api/consulta <br>
+  Utilizar a URI: /api/pacientes/{id}/consultas <br>
   Body: {
           "Paciente":{
            "Id":
@@ -42,14 +46,18 @@ API feita em .NET Core 2.1 utilizando banco de dados SQL Server
         }
         
 - **Finalizar Consulta** <br>
-  Requisição: [HttpPut] <br>
-  Utilizar a URI: /api/finalizar/consulta/{id}
+  Requisição: [HttpDelete] <br>
+  Utilizar a URI: /api/pacientes/{id_paciente}/consultas/{id_consulta}/cancela/finaliza
   
 
 - **Cancelar Consulta** <br>
-  Requisição: [HttpPut] <br>
-  Utilizar a URI: /api/cancelar/consulta/{id}
+  Requisição: [HttpDelete] <br>
+  Utilizar a URI: /api/pacientes/{id_paciente}/consultas/{id_consulta}/cancela
   
 - **Obter lista de Consultas** <br>
   Requisição: [HttpGet] <br>
   Utilizar a URI: /api/consulta
+  
+- **Obter Consulta** <br>
+  Requisição: [HttpGet] <br>
+  Utilizar a URI: /api/consulta/{id}  
