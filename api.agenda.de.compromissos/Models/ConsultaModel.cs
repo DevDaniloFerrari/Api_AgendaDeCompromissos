@@ -12,27 +12,25 @@ namespace api.agenda.de.compromissos.Models
             Inicio = inicio;
             Fim = fim;
             Observacoes = observacoes;
-            Finalizada = false;
-            Cancelada = false;
+            Situacao = new SituacaoModel { Finalizada = false, Cancelada = false };
         }
 
-        public ConsultaModel(int id, PacienteModel paciente, DateTime inicio, DateTime fim, string observacoes, bool finalizada, bool cancelada)
+        public ConsultaModel(int id, PacienteModel paciente, SituacaoModel situacao, DateTime inicio, DateTime fim, string observacoes)
         {
             Id = id;
             Paciente = paciente;
+            Situacao = situacao;
             Inicio = inicio;
             Fim = fim;
             Observacoes = observacoes;
-            Finalizada = finalizada;
-            Cancelada = cancelada;
         }
 
         public int Id { get; set; }
         public PacienteModel Paciente { get; set; }
+        public SituacaoModel Situacao { get; set; }
         public DateTime Inicio { get; set; }
         public DateTime Fim { get; set; }
         public String Observacoes { get; set; }
-        public bool Finalizada { get; set; }
-        public bool Cancelada { get; set; }
+
     }
 }

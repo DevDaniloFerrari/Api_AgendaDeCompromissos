@@ -17,7 +17,7 @@ namespace api.agenda.de.compromissos.Services
             _consultaRepository = consultaRepository;
         }
 
-        public void AgendarConsulta(ConsultaModel consulta)
+        public ConsultaModel AgendarConsulta(ConsultaModel consulta)
         {
             if (this.ConsultaNoMesmoPeriodo(consulta))
                 throw new ConsultasNoMesmoPeriodoException();
@@ -25,7 +25,7 @@ namespace api.agenda.de.compromissos.Services
             if (this.ConsultaComDataFinalMenorQueDataInicial(consulta))
                 throw new DataFinalMenorQueDataInicialException();
 
-            _consultaRepository.AgendarConsulta(consulta);
+            return _consultaRepository.AgendarConsulta(consulta);
         }
 
         public void FinalizarConsulta(int id)
@@ -68,9 +68,13 @@ namespace api.agenda.de.compromissos.Services
             return _consultaRepository.Consultas();
         }
 
+        public ConsultaModel Consulta(int id)
+        {
+            return _consultaRepository.Consulta(id);
+        }
         private IList<ConsultaModel> RemoverConsultasFinalizadasOuCanceladas(IList<ConsultaModel> consultas)
         {
-            return consultas.Where(w => w.Finalizada == false && w.Cancelada == false).ToList();
+            return consultas.Where(w => w.Situacao.Finalizada == false && w.Situacao.Cancelada == false).ToList();
         }
     }
 }

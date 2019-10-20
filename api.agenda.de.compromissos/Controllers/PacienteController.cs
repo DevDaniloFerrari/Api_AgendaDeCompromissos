@@ -20,36 +20,44 @@ namespace api.agenda.de.compromissos.Controllers
         }
 
         [HttpGet()]
-        public string ObterPacientes()
+        public JsonResult ObterPacientes()
         {
             try
             {
-                return JsonConvert.SerializeObject(_pacienteService.Buscar());
+                return new JsonResult(_pacienteService.Buscar()) { StatusCode = 200};
             }
             catch (NenhumPacienteCadastradoException exception)
             {
-                return exception.Message;
+                return new JsonResult(exception.Message) { StatusCode = 406 };
             }
             catch (NaoFoiPossivelConectarNoBancoDeDadosException exception)
             {
-                return exception.Message;
+                return new JsonResult(exception.Message) { StatusCode = 406 };
+            }
+            catch (Exception exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 500 };
             }
         }
 
         [HttpGet("{id}")]
-        public string ObterPaciente(int id)
+        public JsonResult ObterPaciente(int id)
         {
             try
             {
-                return JsonConvert.SerializeObject(_pacienteService.Buscar(id));
+                return new JsonResult(_pacienteService.Buscar(id)) { StatusCode = 200};
             }
             catch (PacienteNaoExisteException exception)
             {
-                return exception.Message;
+                return new JsonResult(exception.Message) { StatusCode = 406 };
             }
             catch (NaoFoiPossivelConectarNoBancoDeDadosException exception)
             {
-                return exception.Message;
+                return new JsonResult(exception.Message) { StatusCode = 406 };
+            }
+            catch (Exception exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 406 };
             }
         }
 
@@ -63,6 +71,10 @@ namespace api.agenda.de.compromissos.Controllers
                 Response.Headers.Add("Location", $"api/pacientes/{id}");
 
                 return new JsonResult("Paciente incluido com sucesso") { StatusCode = 201 };
+            }
+            catch (NaoFoiPossivelConectarNoBancoDeDadosException exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 406 };
             }
             catch (Exception exception)
             {
@@ -80,12 +92,20 @@ namespace api.agenda.de.compromissos.Controllers
 
                     return new JsonResult(pacienteAlterado) { StatusCode = 201 };
                 }
+                catch (PacienteNaoExisteException exception)
+                {
+                    return new JsonResult(exception.Message) { StatusCode = 406 };
+                }
+                catch (NaoFoiPossivelConectarNoBancoDeDadosException exception)
+                {
+                    return new JsonResult(exception.Message) { StatusCode = 406 };
+                }
                 catch (Exception exception)
                 {
                     return new JsonResult(exception.Message) { StatusCode = 500 };
                 }
             else
-                return new JsonResult("Id informado na URL não corresponde com o id passado no body") { StatusCode = 406 };
+                return new JsonResult("Id informado na URL não corresponde com o id passado no Body") { StatusCode = 406 };
 
         }
 
@@ -94,8 +114,18 @@ namespace api.agenda.de.compromissos.Controllers
         {
             try
             {
+                _pacienteService.Buscar(id);
+
                 _pacienteService.Excluir(id);
                 return new JsonResult("Excluido com sucesso") { StatusCode = 200 };
+            }
+            catch (PacienteNaoExisteException exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 406 };
+            }
+            catch (NaoFoiPossivelConectarNoBancoDeDadosException exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 406 };
             }
             catch (Exception exception)
             {
