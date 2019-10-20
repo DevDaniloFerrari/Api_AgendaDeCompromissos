@@ -47,7 +47,7 @@ API feita em .NET Core 2.1 utilizando banco de dados SQL Server
         
 - **Finalizar Consulta** <br>
   Requisição: [HttpDelete] <br>
-  Utilizar a URI: /api/pacientes/{id_paciente}/consultas/{id_consulta}/cancela/finaliza
+  Utilizar a URI: /api/pacientes/{id_paciente}/consultas/{id_consulta}/finaliza
   
 
 - **Cancelar Consulta** <br>
@@ -56,8 +56,8 @@ API feita em .NET Core 2.1 utilizando banco de dados SQL Server
   
 - **Obter lista de Consultas** <br>
   Requisição: [HttpGet] <br>
-  Utilizar a URI: /api/consulta
+  Utilizar a URI: /api/consultas
   
 - **Obter Consulta** <br>
   Requisição: [HttpGet] <br>
-  Utilizar a URI: /api/consulta/{id}  
+  Utilizar a URI: /api/consultas/{id}  
