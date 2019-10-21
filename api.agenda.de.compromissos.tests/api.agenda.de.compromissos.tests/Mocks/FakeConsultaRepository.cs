@@ -10,9 +10,10 @@ namespace api.agenda.de.compromissos.tests.Mocks
 
         IList<ConsultaModel> consultas = new List<ConsultaModel>();
 
-        public void AgendarConsulta(ConsultaModel consulta)
+        public ConsultaModel AgendarConsulta(ConsultaModel consulta)
         {
             consultas.Add(consulta);
+            return consulta;
         }
 
         public void FinalizarConsulta(int id)
@@ -28,6 +29,11 @@ namespace api.agenda.de.compromissos.tests.Mocks
         public IList<ConsultaModel> Consultas()
         {
             return consultas;
+        }
+
+        public ConsultaModel Consulta(int id)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
