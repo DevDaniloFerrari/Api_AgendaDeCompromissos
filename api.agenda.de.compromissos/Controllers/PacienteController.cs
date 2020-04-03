@@ -24,7 +24,7 @@ namespace api.agenda.de.compromissos.Controllers
         {
             try
             {
-                return new JsonResult(_pacienteService.Buscar()) { StatusCode = 200};
+                return new JsonResult(_pacienteService.Buscar()) { StatusCode = 200 };
             }
             catch (NenhumPacienteCadastradoException exception)
             {
@@ -45,7 +45,7 @@ namespace api.agenda.de.compromissos.Controllers
         {
             try
             {
-                return new JsonResult(_pacienteService.Buscar(id)) { StatusCode = 200};
+                return new JsonResult(_pacienteService.Buscar(id)) { StatusCode = 200 };
             }
             catch (PacienteNaoExisteException exception)
             {
@@ -82,30 +82,27 @@ namespace api.agenda.de.compromissos.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public JsonResult AlterarPaciente(int id, [FromBody] PacienteModel paciente)
+        [HttpPut()]
+        public JsonResult AlterarPaciente([FromBody] PacienteModel paciente)
         {
-            if (id == paciente.Id)
-                try
-                {
-                    PacienteModel pacienteAlterado = _pacienteService.Alterar(paciente);
+            try
+            {
+                PacienteModel pacienteAlterado = _pacienteService.Alterar(paciente);
 
-                    return new JsonResult(pacienteAlterado) { StatusCode = 201 };
-                }
-                catch (PacienteNaoExisteException exception)
-                {
-                    return new JsonResult(exception.Message) { StatusCode = 406 };
-                }
-                catch (NaoFoiPossivelConectarNoBancoDeDadosException exception)
-                {
-                    return new JsonResult(exception.Message) { StatusCode = 406 };
-                }
-                catch (Exception exception)
-                {
-                    return new JsonResult(exception.Message) { StatusCode = 500 };
-                }
-            else
-                return new JsonResult("Id informado na URL não corresponde com o id passado no Body") { StatusCode = 406 };
+                return new JsonResult(pacienteAlterado) { StatusCode = 201 };
+            }
+            catch (PacienteNaoExisteException exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 406 };
+            }
+            catch (NaoFoiPossivelConectarNoBancoDeDadosException exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 406 };
+            }
+            catch (Exception exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 500 };
+            }
 
         }
 

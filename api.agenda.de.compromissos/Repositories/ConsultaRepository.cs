@@ -33,7 +33,7 @@ namespace api.agenda.de.compromissos.Repositories
                         consultaAgendada = this.Consulta(id);
                     }
                 }
-                catch (SqlException)
+                catch (SqlException ex)
                 {
                     throw new NaoFoiPossivelConectarNoBancoDeDadosException();
                 }
