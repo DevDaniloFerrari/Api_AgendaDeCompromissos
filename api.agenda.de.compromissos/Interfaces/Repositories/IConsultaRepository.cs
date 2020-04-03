@@ -10,5 +10,6 @@ namespace api.agenda.de.compromissos.Interfaces.Repositories
         void CancelarConsulta(int id);
         IList<ConsultaModel> Consultas();
         ConsultaModel Consulta(int id);
+        IList<ConsultaModel> ConsultaPorPaciente(int id_paciente);
     }
 }

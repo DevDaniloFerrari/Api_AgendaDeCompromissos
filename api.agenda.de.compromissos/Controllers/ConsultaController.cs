@@ -6,7 +6,7 @@ using System;
 
 namespace api.agenda.de.compromissos.Controllers
 {
-    [Route("api/")]
+    [Route("api/consultas/")]
     [ApiController]
     public class ConsultaController : ControllerBase
     {
@@ -16,22 +16,22 @@ namespace api.agenda.de.compromissos.Controllers
 
         public ConsultaController(
             IConsultaService consultaService
-            ,IPacienteService pacienteService)
+            , IPacienteService pacienteService)
         {
             _consultaService = consultaService;
             _pacienteService = pacienteService;
         }
 
-        [HttpGet("consultas")]
+        [HttpGet]
         public JsonResult ObterConsultas()
         {
             try
             {
-                return new JsonResult(_consultaService.Consultas()) { StatusCode = 200};
+                return new JsonResult(_consultaService.Consultas()) { StatusCode = 200 };
             }
-            catch(NenhumaConsultaCadastradaException exception)
+            catch (NenhumaConsultaCadastradaException exception)
             {
-                return new JsonResult(exception.Message) { StatusCode = 406};
+                return new JsonResult(exception.Message) { StatusCode = 406 };
             }
             catch (NaoFoiPossivelConectarNoBancoDeDadosException exception)
             {
@@ -43,7 +43,7 @@ namespace api.agenda.de.compromissos.Controllers
             }
         }
 
-        [HttpGet("consultas/{id_consulta}")]
+        [HttpGet("{id_consulta}")]
         public JsonResult ObterConsulta(int id_consulta)
         {
             try
@@ -64,68 +64,49 @@ namespace api.agenda.de.compromissos.Controllers
             }
         }
 
-        [HttpPost("pacientes/{id_paciente}/consultas")]
-        public JsonResult AgendarConsulta([FromBody] ConsultaModel consulta, int id_paciente)
-        {
-            if(id_paciente == consulta.Paciente.Id)
-                try
-                {
-                    _pacienteService.Buscar(consulta.Paciente.Id);
-
-                    ConsultaModel consultaAgendada = _consultaService.AgendarConsulta(consulta);
-
-                    Response.Headers.Add("Location", $"api/consultas/{consultaAgendada.Id}");
-
-                    return new JsonResult("Consulta incluida com sucesso") { StatusCode = 201 };
-                }
-                catch (PacienteNaoExisteException exception)
-                {
-                    return new JsonResult(exception.Message) { StatusCode = 406 };
-                }
-                catch (ConsultasNoMesmoPeriodoException exception)
-                {
-                    return new JsonResult(exception.Message) { StatusCode = 406 };
-                }
-                catch (DataFinalMenorQueDataInicialException exception)
-                {
-                    return new JsonResult(exception.Message) { StatusCode = 406 };
-                }
-                catch (ConsultaNaoExisteException exception)
-                {
-                    return new JsonResult(exception.Message) { StatusCode = 406 };
-                }
-                catch (NaoFoiPossivelConectarNoBancoDeDadosException exception)
-                {
-                    return new JsonResult(exception.Message) { StatusCode = 406 };
-                }
-                catch (Exception exception)
-                {
-                    return new JsonResult(exception.Message) { StatusCode = 500 };
-                }
-            else
-                return new JsonResult("Id informado na URL não corresponde com o id passado no Body") { StatusCode = 406 };
-        }
-
-        [HttpDelete("pacientes/{id_paciente}/consultas/{id_consulta}/finaliza")]
-        public JsonResult FinalizarConsulta(int id_consulta, int id_paciente)
+        [HttpGet("pacientes/{id_paciente}")]
+        public JsonResult ObterConsultaPorPaciente(int id_paciente)
         {
             try
             {
-                _pacienteService.Buscar(id_paciente);
-
-                ConsultaModel consultaFinalizada = _consultaService.Consulta(id_consulta);
-
-                if (id_paciente != consultaFinalizada.Paciente.Id)
-                    throw new PacienteNaoCorrespondeAEstaConsultaException();
-
-                _consultaService.FinalizarConsulta(id_consulta);
-                return new JsonResult("Consulta finalizada com sucesso") { StatusCode = 200 };
+                return new JsonResult(_consultaService.ConsultaPorPaciente(id_paciente)) { StatusCode = 200 };
             }
-            catch(PacienteNaoExisteException exception)
+            catch (ConsultaNaoExisteException exception)
             {
                 return new JsonResult(exception.Message) { StatusCode = 406 };
             }
-            catch(PacienteNaoCorrespondeAEstaConsultaException exception)
+            catch (NaoFoiPossivelConectarNoBancoDeDadosException exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 406 };
+            }
+            catch (Exception exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 500 };
+            }
+        }
+
+        [HttpPost()]
+        public JsonResult AgendarConsulta([FromBody] ConsultaModel consulta)
+        {
+            try
+            {
+                _pacienteService.Buscar(consulta.Paciente.Id);
+
+                ConsultaModel consultaAgendada = _consultaService.AgendarConsulta(consulta);
+
+                Response.Headers.Add("Location", $"api/consultas/{consultaAgendada.Id}");
+
+                return new JsonResult("Consulta incluida com sucesso") { StatusCode = 201 };
+            }
+            catch (PacienteNaoExisteException exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 406 };
+            }
+            catch (ConsultasNoMesmoPeriodoException exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 406 };
+            }
+            catch (DataFinalMenorQueDataInicialException exception)
             {
                 return new JsonResult(exception.Message) { StatusCode = 406 };
             }
@@ -143,18 +124,41 @@ namespace api.agenda.de.compromissos.Controllers
             }
         }
 
-        [HttpDelete("pacientes/{id_paciente}/consultas/{id_consulta}/cancela")]
-        public JsonResult CancelarConsulta(int id_consulta, int id_paciente)
+        [HttpDelete("finalizacao/{id_consulta}")]
+        public JsonResult FinalizarConsulta(int id_consulta)
         {
             try
             {
-                _pacienteService.Buscar(id_paciente);
+                _consultaService.FinalizarConsulta(id_consulta);
+                return new JsonResult("Consulta finalizada com sucesso") { StatusCode = 200 };
+            }
+            catch (PacienteNaoExisteException exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 406 };
+            }
+            catch (PacienteNaoCorrespondeAEstaConsultaException exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 406 };
+            }
+            catch (ConsultaNaoExisteException exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 406 };
+            }
+            catch (NaoFoiPossivelConectarNoBancoDeDadosException exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 406 };
+            }
+            catch (Exception exception)
+            {
+                return new JsonResult(exception.Message) { StatusCode = 500 };
+            }
+        }
 
-                ConsultaModel consultaCancelada = _consultaService.Consulta(id_consulta);
-
-                if (id_paciente != consultaCancelada.Paciente.Id)
-                    throw new PacienteNaoCorrespondeAEstaConsultaException();
-
+        [HttpDelete("cancelamento/{id_consulta}")]
+        public JsonResult CancelarConsulta(int id_consulta)
+        {
+            try
+            {
                 _consultaService.CancelarConsulta(id_consulta);
                 return new JsonResult("Consulta cancelada com sucesso") { StatusCode = 200 };
             }

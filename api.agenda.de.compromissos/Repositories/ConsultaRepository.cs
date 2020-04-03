@@ -1,4 +1,5 @@
 ﻿using api.agenda.de.compromissos.Exceptions;
+using api.agenda.de.compromissos.Interfaces.Repositories;
 using api.agenda.de.compromissos.Models;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Data.SqlClient;
 
 namespace api.agenda.de.compromissos.Repositories
 {
-    public class ConsultaRepository : Interfaces.Repositories.IConsultaRepository
+    public class ConsultaRepository : IConsultaRepository
     {
         public ConsultaModel AgendarConsulta(ConsultaModel consulta)
         {
@@ -32,7 +33,7 @@ namespace api.agenda.de.compromissos.Repositories
                         consultaAgendada = this.Consulta(id);
                     }
                 }
-                catch(SqlException)
+                catch (SqlException)
                 {
                     throw new NaoFoiPossivelConectarNoBancoDeDadosException();
                 }
@@ -63,7 +64,7 @@ namespace api.agenda.de.compromissos.Repositories
 
                     }
                 }
-                catch(SqlException)
+                catch (SqlException)
                 {
                     throw new NaoFoiPossivelConectarNoBancoDeDadosException();
                 }
@@ -92,7 +93,7 @@ namespace api.agenda.de.compromissos.Repositories
                         command.ExecuteNonQuery();
                     }
                 }
-                catch(SqlException)
+                catch (SqlException)
                 {
                     throw new NaoFoiPossivelConectarNoBancoDeDadosException();
                 }
@@ -153,7 +154,7 @@ namespace api.agenda.de.compromissos.Repositories
                         }
                     }
                 }
-                catch(SqlException)
+                catch (SqlException)
                 {
                     throw new NaoFoiPossivelConectarNoBancoDeDadosException();
                 }
@@ -215,7 +216,7 @@ namespace api.agenda.de.compromissos.Repositories
                         }
                     }
                 }
-                catch(SqlException)
+                catch (SqlException)
                 {
                     throw new NaoFoiPossivelConectarNoBancoDeDadosException();
                 }
@@ -226,6 +227,69 @@ namespace api.agenda.de.compromissos.Repositories
             }
 
             return consulta;
+        }
+
+        public IList<ConsultaModel> ConsultaPorPaciente(int id_paciente)
+        {
+            var consultas = new List<ConsultaModel>();
+
+            using (var connection = new SqlConnection(Configuration.getConnectionString()))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "SELECT [id_consulta]" +
+                                    "      ,[id_paciente]" +
+                                    "	   ,[Nome]" +
+                                    "	   ,[Nascimento]" +
+                                    "      ,[Inicio]" +
+                                    "      ,[Fim]" +
+                                    "      ,[Observacoes]" +
+                                    "      ,[Finalizada]" +
+                                    "      ,[Cancelada]" +
+                                    $"  FROM [vw].[Consulta] WHERE [id_paciente]={id_paciente}";
+
+                    using (var command = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+
+                            if (!reader.HasRows)
+                                throw new ConsultaNaoExisteException();
+
+                            while (reader.Read())
+                            {
+                                consultas.Add(new ConsultaModel(
+                                                                (int)reader["id_consulta"],
+                                                                new PacienteModel(
+                                                                                    (int)reader["id_paciente"],
+                                                                                    (string)reader["Nome"],
+                                                                                    (DateTime)reader["Nascimento"]),
+                                                                new SituacaoModel(
+                                                                                    (bool)reader["Finalizada"],
+                                                                                    (bool)reader["Cancelada"]
+                                                                                    ),
+                                                                (DateTime)reader["Inicio"],
+                                                                (DateTime)reader["Fim"],
+                                                                (string)reader["Observacoes"]
+                                                               ));
+
+                            }
+                        }
+                    }
+                }
+                catch (SqlException)
+                {
+                    throw new NaoFoiPossivelConectarNoBancoDeDadosException();
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
+            return consultas;
         }
     }
 }

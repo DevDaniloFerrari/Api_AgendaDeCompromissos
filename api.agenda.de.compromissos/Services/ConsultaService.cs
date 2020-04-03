@@ -47,7 +47,16 @@ namespace api.agenda.de.compromissos.Services
 
         public bool ConsultaNoMesmoPeriodo(ConsultaModel consulta)
         {
-            var consultas = _consultaRepository.Consultas();
+            IList<ConsultaModel> consultas;
+
+            try
+            {
+                consultas = _consultaRepository.Consultas().ToList();
+            }
+            catch (NenhumaConsultaCadastradaException)
+            {
+                consultas = new List<ConsultaModel>();
+            }
 
             consultas = RemoverConsultasFinalizadasOuCanceladas(consultas);
 
@@ -75,6 +84,11 @@ namespace api.agenda.de.compromissos.Services
         private IList<ConsultaModel> RemoverConsultasFinalizadasOuCanceladas(IList<ConsultaModel> consultas)
         {
             return consultas.Where(w => w.Situacao.Finalizada == false && w.Situacao.Cancelada == false).ToList();
+        }
+
+        public IList<ConsultaModel> ConsultaPorPaciente(int id_paciente)
+        {
+            return _consultaRepository.ConsultaPorPaciente(id_paciente);
         }
     }
 }
